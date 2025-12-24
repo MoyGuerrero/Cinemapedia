@@ -1,10 +1,16 @@
+import 'package:cinemapedia/domain/entities/movie.dart';
+import 'package:cinemapedia/presentation/delegates/search_movies_delegate.dart';
+import 'package:cinemapedia/presentation/providers/movies/movies_respository_priver.dart';
+import 'package:cinemapedia/presentation/providers/search/search_movies_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class CustomAppbar extends StatelessWidget {
+class CustomAppbar extends ConsumerWidget {
   const CustomAppbar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
     final titleStyle = Theme.of(context).textTheme.titleMedium;
     return SafeArea(
@@ -19,7 +25,29 @@ class CustomAppbar extends StatelessWidget {
               const SizedBox(width: 5),
               Text('Cinemapedia', style: titleStyle),
               Spacer(),
-              IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+              IconButton(
+                onPressed: () {
+                  final searchedMovies = ref.read(searchMoviesProvider);
+
+                  final searchQuery = ref.read(searchQueryProvider);
+
+                  showSearch<Movie?>(
+                    query: searchQuery,
+                    context: context,
+                    delegate: SearchMoviesDelegate(
+                      initialMovies: searchedMovies,
+                      searchMovies: ref
+                          .read(searchMoviesProvider.notifier)
+                          .searchMoviesByQuery,
+                    ),
+                  ).then((movie) {
+                    if (movie == null) return;
+                    if (!context.mounted) return;
+                    context.push('/movie/${movie.id}');
+                  });
+                },
+                icon: Icon(Icons.search),
+              ),
             ],
           ),
         ),

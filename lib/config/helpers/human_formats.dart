@@ -5,9 +5,9 @@ class HumanFormats {
     return NumberFormat.compact(locale: 'en_US').format(number);
   }
 
-  static String qualifications(double number) {
+  static String qualifications(double number,[int decimals = 0]) {
     return NumberFormat.compactCurrency(
-      decimalDigits: 2,
+      decimalDigits: decimals,
       symbol: '',
       locale: 'en_US',
     ).format(number);
