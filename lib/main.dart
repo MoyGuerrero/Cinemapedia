@@ -1,3 +1,4 @@
+import 'package:cinemapedia/config/database/database.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cinemapedia/config/router/app_router.dart';
@@ -7,6 +8,23 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // await db
+  //     .into(db.favoriteMovies)
+  //     .insert(
+  //       FavoriteMoviesCompanion.insert(
+  //         movieId: 1,
+  //         backdropPath: 'backdropPath.png',
+  //         originalTitle: 'My first movie',
+  //         posterPath: 'posterPath.png',
+  //         title: 'Mi primera pelicula',
+  //       ),
+  //     );
+  // final deleteQuery = db.delete(db.favoriteMovies);
+  // await deleteQuery.go();
+  // final moviesQuery = db.select(db.favoriteMovies).get();
+  // print('movies: $moviesQuery');
   await dotenv.load(fileName: '.env');
   runApp(const ProviderScope(child: MainApp()));
 }
